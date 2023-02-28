@@ -36,22 +36,23 @@ public class CubeController : MonoBehaviour
     }
 
     // FixedUpdate can be called multiple times per frame
-    void FixedUpdate() {
+    void FixedUpdate() 
+    {
         float forceX; // N
+        float forceZ;
 
         // Calculate spring force on body for x component of force vector
         forceX = -rigidBody.position.x * springConstant;
-        rigidBody.AddForce(new Vector3(forceX, 0f, 0f));
-
+        rigidBody.AddForce(new Vector3(forceX,0f, 0f));
+        //forceZ = -rigidBody.position.z * springConstant;
+        //rigidBody.AddForce(new Vector3(0f, 0f,forceZ));
         currentTimeStep += Time.deltaTime;
-        timeSeries.Add(new List<float>() {currentTimeStep, rigidBody.position.x, rigidBody.velocity.x, forceX});
-    }
 
-    void OnApplicationQuit() {
-        WriteTimeSeriesToCSV();
+        timeSeries.Add(new List<float>() { currentTimeStep, rigidBody.position.x, rigidBody.velocity.x, forceX });
+       // timeSeries.Add(new List<float>() {currentTimeStep, rigidBody.position.z, rigidBody.velocity.z, forceZ });
     }
-
-    void WriteTimeSeriesToCSV() {
+    void WriteTimeSeriesToCSV() 
+    {
         using (var streamWriter = new StreamWriter("time_series.csv")) {
             streamWriter.WriteLine("t,x(t),v(t),F(t) (added)");
             
@@ -60,5 +61,11 @@ public class CubeController : MonoBehaviour
                 streamWriter.Flush();
             }
         }
+    }  
+
+    void OnApplicationQuit() 
+    {
+        WriteTimeSeriesToCSV();
     }
+
 }
